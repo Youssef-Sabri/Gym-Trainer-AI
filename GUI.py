@@ -155,6 +155,10 @@ class GymTrainerApp:
                                        foreground="#c0392b")
         self.feedback_text.tag_configure("warning", 
                                        foreground="#f39c12")
+        self.feedback_text.tag_configure("good_feedback", 
+                                       foreground="#27ae60")
+        self.feedback_text.tag_configure("info", 
+                                       foreground="#3498db")
 
     def create_status_bar(self):
         self.status_var = tk.StringVar(value="Ready")
@@ -188,6 +192,14 @@ class GymTrainerApp:
         self.start_button.configure(state=tk.NORMAL)
         self.stop_button.configure(state=tk.DISABLED)
         self.status_var.set("Analysis stopped")
+        
+        # Reset the trainer data
+        self.trainer.bicep_curl_trainer.reset_data()
+        
+        # Clear feedback text
+        self.feedback_text.config(state=tk.NORMAL)
+        self.feedback_text.delete(1.0, tk.END)
+        self.feedback_text.config(state=tk.DISABLED)
         
         if self.capture_thread and self.capture_thread.is_alive():
             self.capture_thread.join(timeout=1.0)
@@ -232,16 +244,23 @@ class GymTrainerApp:
                 "separator")
         
         # Metrics
-        metrics = feedback_data['metrics']
-        self.feedback_text.insert(tk.END, f"Rep Count: {metrics['reps']}\n", "rep_count")
-        score_tag = "good_score" if metrics['form_score'] > 70 else "bad_score"
-        self.feedback_text.insert(tk.END, f"Form Score: {metrics['form_score']}%\n\n", score_tag)
+        metrics = feedback_data.get('metrics', {})
+        reps = metrics.get('reps', 0)
+        form_score = metrics.get('form_score', 0)
+        
+        self.feedback_text.insert(tk.END, f"Reps: {reps}\n", "rep_count")
+        score_tag = "good_score" if form_score > 70 else "bad_score"
+        self.feedback_text.insert(tk.END, f"Form Score: {form_score}%\n\n", score_tag)
+        
+        # Current elbow angle if available
+        if 'elbow_angle' in metrics:
+            self.feedback_text.insert(tk.END, f"Elbow Angle: {metrics['elbow_angle']:.1f}°\n\n", "separator")
         
         # Feedback messages
-        if feedback_data['messages']:
+        if feedback_data.get('messages'):
             self.feedback_text.insert(tk.END, "Form Feedback:\n", "separator")
             for msg in feedback_data['messages']:
-                tag = "error" if "❌" in msg else "warning" if "⚠️" in msg else None
+                tag = "good_feedback" if "✨" in msg else "error" if "❌" in msg else "warning" if "⚠️" in msg else "info"
                 self.feedback_text.insert(tk.END, f"{msg}\n", tag)
         
         self.feedback_text.config(state=tk.DISABLED)
