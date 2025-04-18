@@ -3,8 +3,6 @@ import threading
 import tkinter as tk
 from tkinter import messagebox, ttk
 from trainer import AITrainer
-from PIL import Image, ImageTk
-import os
 from datetime import datetime
 
 class ModernButton(ttk.Button):
