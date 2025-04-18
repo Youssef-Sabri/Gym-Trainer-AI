@@ -1,0 +1,1 @@
+https://github.com/open-mmlab/mmpose/blob/main/projects/rtmpose/rtmpose/body_2d_keypoint/rtmpose-l_8xb256-420e_coco-256x192.py
