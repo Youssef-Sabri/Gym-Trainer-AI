@@ -5,7 +5,8 @@
 
 ---
 
-![Gym Trainer AI Banner](https://via.placeholder.com/1024x256?text=Gym+Trainer+AI+%7C+Real-Time+Workout+Feedback)
+![Gym Trainer AI Banner](banner.png)
+
 
 ---
 
