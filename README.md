@@ -54,7 +54,7 @@ gym_trainer_ai/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/gym-trainer-ai.git
+git clone https://github.com/Youssef-Sabri/gym-trainer-ai.git
 cd gym-trainer-ai
 ```
 
